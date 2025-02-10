@@ -81,5 +81,4 @@ backend/dist/
 # Frontend specific
 src/styles/*.css.d.ts
 
-# git stuff
-.git/scripts/
+
