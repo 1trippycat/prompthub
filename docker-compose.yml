@@ -1,0 +1,62 @@
+services:
+  api:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/prompthub
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE:-https://api.openai.com/v1}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - prompthub-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - prompthub-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - prompthub-network
+
+  # Optional: MongoDB admin interface
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USER:-admin}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASS:-pass}
+    depends_on:
+      - mongodb
+    networks:
+      - prompthub-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  prompthub-network:
+    driver: bridge

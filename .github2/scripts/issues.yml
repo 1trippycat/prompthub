@@ -1,0 +1,579 @@
+---
+issues:
+  - title: "Implement Prompt Routes (Backend)"
+    labels: ["high-priority", "backend", "api"]
+    file: "./backend/routes/prompts.js"
+    description: "Implement the prompts API routes to enable CRUD operations for prompts"
+    dependencies: []  # No empty files as dependencies
+    required_reading:
+      - ./backend/routes/auth.js (Reference route implementation)
+      - ./backend/services/promptService.js (Service layer implementation)
+      - ./backend/models/Prompt.js (Data model)
+      - ./backend/middleware/* (Auth, validation, error handling)
+    acceptance_criteria: |
+      1. Implement the following routes with proper middleware:
+         ```javascript
+         // List prompts with pagination and filters
+         GET /api/prompts
+         // Create new prompt
+         POST /api/prompts
+         // Get single prompt
+         GET /api/prompts/:id
+         // Update prompt
+         PUT /api/prompts/:id
+         // Delete prompt
+         DELETE /api/prompts/:id
+         // Get prompt versions
+         GET /api/prompts/:id/versions
+         ```
+      2. Each route should:
+         - Use authentication middleware
+         - Validate request data
+         - Use promptService for database operations
+         - Return proper HTTP status codes
+         - Include error handling
+    implementation_notes: |
+      1. Required imports:
+         ```javascript
+         import express from 'express';
+         import authMiddleware from '../middleware/auth.js';
+         import validateMiddleware from '../middleware/validate.js';
+         import promptService from '../services/promptService.js';
+         ```
+      2. Route implementation pattern:
+         ```javascript
+         router.get('/', 
+           authMiddleware.verifyToken,
+           validateMiddleware.validatePagination,
+           async (req, res, next) => {
+             try {
+               // Implementation
+             } catch (error) {
+               next(error);
+             }
+           }
+         );
+         ```
+      3. Use existing error handling patterns from auth.js
+      4. Follow RESTful conventions for response formats
+      5. Include proper JSDoc comments for each route
+
+  - title: "Implement Prompt API Service"
+    labels: ["high-priority", "frontend", "api"]
+    file: "./src/services/api/promptApi.js"
+    description: "Implement the frontend API service for interacting with prompt endpoints"
+    dependencies: ["./backend/routes/prompts.js"]
+    required_reading:
+      - ./src/services/api.js (Base API implementation)
+      - ./src/utils/constants.js (API constants)
+    acceptance_criteria: |
+      1. Implement methods:
+         ```javascript
+         getPrompts(params): Promise<PromptList>
+         getPrompt(id): Promise<Prompt>
+         createPrompt(data): Promise<Prompt>
+         updatePrompt(id, data): Promise<Prompt>
+         deletePrompt(id): Promise<void>
+         getVersions(id): Promise<Version[]>
+         ```
+      2. Include proper error handling
+      3. Add request/response type definitions
+      4. Implement caching where appropriate
+      5. Add retry logic for failed requests
+    implementation_notes: |
+      1. Follow the pattern in api.js:
+         ```javascript
+         export const promptApi = {
+           async getPrompts(params = {}) {
+             const queryString = new URLSearchParams(params).toString();
+             return await apiClient.get(`/prompts?${queryString}`);
+           },
+           // ... other methods
+         };
+         ```
+      2. Use the error handling middleware from api.js
+      3. Implement caching using the storage service
+      4. Add proper JSDoc comments
+
+  - title: "Implement Version History Hook"
+    labels: ["high-priority", "frontend", "hooks"]
+    file: "./src/hooks/prompt/useVersions.js"
+    description: "Implement the hook for managing prompt versions"
+    dependencies: ["./src/services/api/promptApi.js"]
+    required_reading:
+      - ./src/hooks/usePrompts.js (Example hook implementation)
+      - ./backend/models/Prompt.js (Version schema)
+    acceptance_criteria: |
+      1. Implement hook with methods:
+         ```javascript
+         const {
+           versions,
+           isLoading,
+           error,
+           getVersions,
+           restoreVersion,
+           compareVersions
+         } = useVersions(promptId);
+         ```
+      2. Include loading and error states
+      3. Implement optimistic updates
+      4. Add proper error handling
+      5. Include version comparison functionality
+    implementation_notes: |
+      1. Follow the pattern in usePrompts.js:
+         ```javascript
+         export const useVersions = (promptId) => {
+           const [versions, setVersions] = useState([]);
+           const [isLoading, setIsLoading] = useState(false);
+           const [error, setError] = useState(null);
+           
+           // Implementation
+         };
+         ```
+      2. Use promptApi for data fetching
+      3. Implement caching strategy
+      4. Add cleanup in useEffect
+
+  - title: "Implement LLM Enhancement Hook"
+    labels: ["high-priority", "frontend", "hooks"]
+    file: "./src/hooks/llm/useEnhancement.js"
+    description: "Implement the hook for OpenAI prompt enhancement functionality"
+    dependencies: ["./src/services/api/llmApi.js"]
+    required_reading:
+      - ./backend/config/llm.js (LLM configuration)
+      - ./backend/services/llmService.js (Backend LLM service)
+    acceptance_criteria: |
+      1. Implement hook with methods:
+         ```javascript
+         const {
+           enhance,
+           isEnhancing,
+           error,
+           result,
+           supportedEnhancements
+         } = useEnhancement();
+         ```
+      2. Support enhancement types: clarity, specificity, context, creativity
+      3. Include proper error handling
+      4. Add rate limiting handling
+      5. Include usage tracking
+    implementation_notes: |
+      1. Hook implementation pattern:
+         ```javascript
+         export const useEnhancement = () => {
+           const [isEnhancing, setIsEnhancing] = useState(false);
+           const [error, setError] = useState(null);
+           const [result, setResult] = useState(null);
+           
+           const enhance = async (content, type) => {
+             // Implementation
+           };
+           
+           return { enhance, isEnhancing, error, result };
+         };
+         ```
+      2. Use llmApi for API calls
+      3. Implement retry logic
+      4. Add proper error messages
+
+  - title: "Implement LLM API Service"
+    labels: ["high-priority", "frontend", "api"]
+    file: "./src/services/api/llmApi.js"
+    description: "Implement the frontend service for LLM API interactions"
+    dependencies: []
+    required_reading:
+      - ./backend/routes/llm.js (LLM routes)
+      - ./backend/config/llm.js (LLM configuration)
+    acceptance_criteria: |
+      1. Implement methods:
+         ```javascript
+         enhance(content, type): Promise<EnhancementResult>
+         validate(content): Promise<ValidationResult>
+         generateTags(content): Promise<string[]>
+         suggestCategory(content): Promise<string>
+         ```
+      2. Include proper error handling
+      3. Add request validation
+      4. Implement rate limiting
+      5. Add usage tracking
+    implementation_notes: |
+      1. Service implementation pattern:
+         ```javascript
+         export const llmApi = {
+           async enhance(content, type) {
+             return await apiClient.post('/llm/enhance', {
+               content,
+               type
+             });
+           },
+           // ... other methods
+         };
+         ```
+      2. Use error handling from api.js
+      3. Implement retry logic
+      4. Add proper JSDoc comments
+
+  - title: "Implement Auth API Service"
+    labels: ["high-priority", "frontend", "auth"]
+    file: "./src/services/api/authApi.js"
+    description: "Implement the frontend service for Google OAuth authentication"
+    dependencies: []
+    required_reading:
+      - ./src/services/auth.js (Existing auth implementation)
+      - ./backend/config/auth.js (Auth configuration)
+      - ./backend/routes/auth.js (Auth routes)
+    acceptance_criteria: |
+      1. Implement methods:
+         ```javascript
+         loginWithGoogle(): Promise<User>
+         logout(): Promise<void>
+         getCurrentUser(): Promise<User>
+         updateSettings(settings: UserSettings): Promise<User>
+         refreshToken(): Promise<string>
+         ```
+      2. Handle Google OAuth flow
+      3. Manage token storage
+      4. Handle auth state
+      5. Include error handling for auth failures
+    implementation_notes: |
+      1. Service implementation pattern:
+         ```javascript
+         export const authApi = {
+           async loginWithGoogle() {
+             const auth = await chrome.identity.getAuthToken({ interactive: true });
+             return await apiClient.post('/auth/google', { token: auth.token });
+           },
+           // ... other methods
+         };
+         ```
+      2. Use chrome.identity API for Google OAuth
+      3. Implement token refresh logic
+      4. Add proper error handling
+
+  - title: "Implement User Permissions Hook"
+    labels: ["high-priority", "frontend", "auth"]
+    file: "./src/hooks/auth/usePermissions.js"
+    description: "Implement the hook for handling user permissions and access control"
+    dependencies: ["./src/services/api/authApi.js"]
+    required_reading:
+      - ./src/hooks/useAuth.js (Auth hook implementation)
+      - ./backend/models/User.js (User roles and permissions)
+    acceptance_criteria: |
+      1. Implement hook with methods:
+         ```javascript
+         const {
+           hasPermission,
+           hasRole,
+           isAdmin,
+           loading,
+           error
+         } = usePermissions();
+         ```
+      2. Handle role-based access control
+      3. Cache permission checks
+      4. Integrate with AuthContext
+      5. Add proper error states
+    implementation_notes: |
+      1. Hook implementation pattern:
+         ```javascript
+         export const usePermissions = () => {
+           const { user } = useAuth();
+           const [loading, setLoading] = useState(false);
+           const [error, setError] = useState(null);
+           
+           const hasRole = useCallback((role) => {
+             return user?.role === role;
+           }, [user]);
+           
+           // ... other methods
+         };
+         ```
+      2. Use existing auth context
+      3. Implement permission caching
+      4. Add cleanup in useEffect
+
+  - title: "Implement Chrome Storage Service"
+    labels: ["medium-priority", "frontend", "storage"]
+    file: "./src/services/storage/chromeStorage.js"
+    description: "Implement the Chrome extension storage service for data persistence"
+    dependencies: []
+    required_reading:
+      - ./src/services/storage.js (Storage service interface)
+      - ./src/utils/constants.js (Storage constants)
+    acceptance_criteria: |
+      1. Implement methods:
+         ```javascript
+         get(key: string): Promise<any>
+         set(key: string, value: any): Promise<void>
+         remove(key: string): Promise<void>
+         clear(): Promise<void>
+         getMultiple(keys: string[]): Promise<Record<string, any>>
+         setMultiple(items: Record<string, any>): Promise<void>
+         ```
+      2. Handle storage quotas
+      3. Implement error handling
+      4. Add migration support
+      5. Include storage event listeners
+    implementation_notes: |
+      1. Service implementation pattern:
+         ```javascript
+         export const chromeStorage = {
+           async get(key) {
+             try {
+               const result = await chrome.storage.local.get(key);
+               return result[key];
+             } catch (error) {
+               console.error('Storage get error:', error);
+               throw error;
+             }
+           },
+           // ... other methods
+         };
+         ```
+      2. Use chrome.storage API
+      3. Implement quota management
+      4. Add proper error handling
+
+  - title: "Implement Extension Background Script"
+    labels: ["medium-priority", "extension"]
+    file: "./src/extension/background/background.js"
+    description: "Implement the Chrome extension background script for handling global extension state and events"
+    dependencies: ["./src/services/storage/chromeStorage.js"]
+    required_reading:
+      - ./src/services/api.js (API client)
+      - ./src/utils/constants.js (Extension constants)
+    acceptance_criteria: |
+      1. Implement event handlers:
+         ```javascript
+         onInstalled()
+         onMessageReceived()
+         onContextMenuClicked()
+         onAuthStateChanged()
+         ```
+      2. Set up context menus
+      3. Handle authentication events
+      4. Manage extension state
+      5. Implement message passing
+    implementation_notes: |
+      1. Background script pattern:
+         ```javascript
+         chrome.runtime.onInstalled.addListener(() => {
+           // Setup context menus
+           chrome.contextMenus.create({
+             id: 'savePrompt',
+             title: 'Save as Prompt',
+             contexts: ['selection']
+           });
+         });
+         
+         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+           // Handle messages
+         });
+         ```
+      2. Use chrome.contextMenus API
+      3. Implement message handling
+      4. Add proper logging
+
+  - title: "Implement Content Script"
+    labels: ["medium-priority", "extension"]
+    file: "./src/extension/content/contentScript.js"
+    description: "Implement the content script for page interaction and prompt handling"
+    dependencies: [
+      "./src/extension/content/pageUtils.js",
+      "./src/extension/background/background.js"
+    ]
+    required_reading:
+      - ./src/services/api.js (API client)
+      - ./src/utils/constants.js (Extension constants)
+    acceptance_criteria: |
+      1. Implement features:
+         - Text field detection
+         - Prompt insertion
+         - Context menu handling
+         - Message passing
+      2. Handle text selection
+      3. Manage input field integration
+      4. Support site-specific configs
+    implementation_notes: |
+      1. Content script pattern:
+         ```javascript
+         // Listen for messages from background script
+         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+           if (request.type === 'INSERT_PROMPT') {
+             insertPromptIntoActiveElement(request.prompt);
+           }
+         });
+         
+         // Handle text field detection
+         document.addEventListener('focusin', (event) => {
+           if (isTextField(event.target)) {
+             notifyPromptAvailable();
+           }
+         });
+         ```
+      2. Use pageUtils for DOM operations
+      3. Implement event handlers
+      4. Add cleanup listeners
+
+  - title: "Implement Page Utilities"
+    labels: ["medium-priority", "extension"]
+    file: "./src/extension/content/pageUtils.js"
+    description: "Implement utility functions for page manipulation and DOM operations"
+    dependencies: []
+    required_reading:
+      - ./src/utils/constants.js (Extension constants)
+    acceptance_criteria: |
+      1. Implement utility functions:
+         ```javascript
+         isTextField(element: HTMLElement): boolean
+         getSelectedText(): string
+         insertTextAtCursor(text: string): void
+         findTextFields(): HTMLElement[]
+         handleTextInput(element: HTMLElement): void
+         ```
+      2. Handle different input types
+      3. Support rich text editors
+      4. Handle iframe content
+      5. Add proper error handling
+    implementation_notes: |
+      1. Utility implementation pattern:
+         ```javascript
+         export const pageUtils = {
+           isTextField(element) {
+             return (
+               element.tagName === 'TEXTAREA' ||
+               (element.tagName === 'INPUT' && 
+                ['text', 'search'].includes(element.type))
+             );
+           },
+           // ... other methods
+         };
+         ```
+      2. Handle common edge cases
+      3. Support popular editors
+      4. Add proper validation
+
+  - title: "Implement Prompt Component Styles"
+    labels: ["medium-priority", "frontend", "styling"]
+    file: "./src/styles/components/prompt.css"
+    description: "Implement component-specific styles for prompt-related UI components"
+    dependencies: []
+    required_reading:
+      - ./src/styles/main.css (Base styles and theme setup)
+      - ./src/components/prompt/* (Prompt components)
+    acceptance_criteria: |
+      1. Implement styles for:
+         - Prompt cards and lists
+         - Version history display
+         - Enhancement interface
+         - Tag display and management
+      2. Support dark/light themes
+      3. Use existing CSS custom properties
+      4. Maintain accessibility standards
+      5. Follow responsive design patterns
+    implementation_notes: |
+      1. Style structure pattern:
+         ```css
+         /* Prompt Card Styles */
+         .prompt-card {
+           /* Use CSS custom properties for theming */
+           background-color: var(--card);
+           color: var(--card-foreground);
+         }
+
+         /* Custom animations for prompt transitions */
+         .prompt-transition {
+           animation: var(--slide-up-fade);
+         }
+
+         /* Styles not covered by Tailwind utilities */
+         .prompt-enhancement {
+           /* Custom styles for enhancement UI */
+         }
+         ```
+      2. Focus on styles that can't be achieved with Tailwind
+      3. Use existing animation definitions
+      4. Add proper media queries
+
+  - title: "Implement Editor Component Styles"
+    labels: ["medium-priority", "frontend", "styling"]
+    file: "./src/styles/components/editor.css"
+    description: "Implement component-specific styles for the prompt editor interface"
+    dependencies: []
+    required_reading:
+      - ./src/styles/main.css (Base styles and theme setup)
+      - ./src/components/prompt/editor/* (Editor components)
+    acceptance_criteria: |
+      1. Implement styles for:
+         - Editor toolbar
+         - Text editing area
+         - Version controls
+         - Enhancement previews
+      2. Support dark/light themes
+      3. Maintain consistent typography
+      4. Handle editor states (focus, hover, etc.)
+      5. Support responsive layouts
+    implementation_notes: |
+      1. Style implementation pattern:
+         ```css
+         /* Editor container styles */
+         .editor-container {
+           /* Use theme variables */
+           background-color: var(--background);
+           color: var(--foreground);
+         }
+
+         /* Custom toolbar styles */
+         .editor-toolbar {
+           border-bottom: 1px solid var(--border);
+         }
+
+         /* Editor states */
+         .editor-container:focus-within {
+           /* Focus styles */
+         }
+         ```
+      2. Use existing color scheme
+      3. Implement proper spacing
+      4. Add transition effects
+
+  - title: "Implement Template Component Styles"
+    labels: ["medium-priority", "frontend", "styling"]
+    file: "./src/styles/components/template.css"
+    description: "Implement component-specific styles for template-related UI components"
+    dependencies: []
+    required_reading:
+      - ./src/styles/main.css (Base styles and theme setup)
+      - ./src/components/prompt/template/* (Template components)
+    acceptance_criteria: |
+      1. Implement styles for:
+         - Template variable inputs
+         - Preview display
+         - Variable highlighting
+         - Form controls
+      2. Support dark/light themes
+      3. Style variable placeholders
+      4. Handle template states
+      5. Support responsive layouts
+    implementation_notes: |
+      1. Style implementation pattern:
+         ```css
+         /* Template variable styles */
+         .template-variable {
+           background-color: var(--accent);
+           border-radius: var(--radius);
+         }
+
+         /* Preview container */
+         .template-preview {
+           background-color: var(--muted);
+         }
+
+         /* Variable highlighting */
+         .variable-highlight {
+           animation: var(--slide-up-fade);
+         }
+         ```
+      2. Use consistent spacing
+      3. Implement proper transitions
+      4. Add hover/focus states
