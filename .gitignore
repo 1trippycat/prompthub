@@ -1,0 +1,85 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output/
+
+# Production
+dist/
+build/
+out/
+
+# Development
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+.directory
+*.sublime-workspace
+*.sublime-project
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+debug.log
+
+# Chrome Extension specific
+*.pem
+*.crx
+
+# MongoDB
+*.mongodb
+mongod.lock
+mongodb.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Build files
+*.map
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+tmp/
+
+# Local development SSL certificates
+*.pem
+*.key
+*.crt
+
+# Backend specific
+backend/logs/
+backend/dist/
+
+# Frontend specific
+src/styles/*.css.d.ts
+
+# git stuff
+.git/scripts/

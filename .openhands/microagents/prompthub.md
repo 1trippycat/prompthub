@@ -4,6 +4,137 @@ type: repo
 agent: CodeActAgent
 ---
 
+Name:  PromptHub
+Description:  This repository contains the code for PromptHub, a Chrome extension for managing and enhancing AI prompts. It consists of an Express.js backend (in the `backend` directory) and React frontend (in the `src` directory).
+
+## General Setup
+
+To set up the entire repo, including frontend and backend:
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Set up environment variables:
+- Copy `.env.example` to `.env`
+- Configure required variables
+
+Before pushing any changes, ensure all lint errors and tests pass:
+
+* For backend changes:
+  ```bash
+  cd backend
+  npm run lint
+  npm test
+  ```
+
+* For frontend changes:
+  ```bash
+  npm run lint:fix
+  npm run build
+  ```
+
+## Repository Structure
+
+### Backend
+* Located in the `backend` directory
+* Built with Express.js and MongoDB
+* Key directories:
+  * `config/` - Configuration files
+  * `middleware/` - Express middleware
+  * `models/` - MongoDB schemas
+  * `routes/` - API routes
+  * `services/` - Business logic
+  * `src/` - Application core
+
+### Frontend
+* Located in the `src` directory
+* Built with React 18 and Tailwind CSS
+* Key directories:
+  * `components/` - React components
+  * `contexts/` - React context providers
+  * `hooks/` - Custom React hooks
+  * `services/` - API and utility services
+  * `styles/` - CSS and Tailwind styles
+  * `utils/` - Helper functions
+
+## Development
+
+### Backend Development
+* Prerequisites:
+  * Node.js
+  * MongoDB
+* Setup:
+  ```bash
+  cd backend
+  npm install
+  ```
+* Testing:
+  * Run tests: `npm test`
+  * Run specific tests: `npm test -- -t "TestName"`
+* Environment Variables:
+  * `MONGODB_URI`
+  * `JWT_SECRET`
+  * `GOOGLE_CLIENT_ID`
+  * `GOOGLE_CLIENT_SECRET`
+
+### Frontend Development
+* Prerequisites:
+  * Node.js
+  * Chrome Extension Developer Mode
+* Setup:
+  ```bash
+  npm install
+  ```
+* Development:
+  * Start dev server: `npm run dev`
+  * Build extension: `npm run build`
+* Testing:
+  * Run tests: `npm test`
+  * Run specific tests: `npm test -- -t "TestName"`
+* Environment Variables:
+  * Set in `.env` or as environment variables
+  * Available variables:
+    * `VITE_API_URL`
+    * `VITE_GOOGLE_CLIENT_ID`
+
+### Chrome Extension
+* Build the extension:
+  ```bash
+  npm run build
+  ```
+* Load unpacked extension:
+  1. Open Chrome Extensions page
+  2. Enable Developer Mode
+  3. Click "Load unpacked"
+  4. Select the `dist` directory
+
+## Key Features
+
+* Prompt Management
+  * Create, edit, delete prompts
+  * Version control
+  * Categories and tags
+  * Search and filter
+
+* Template System
+  * Variable-based templates
+  * Real-time preview
+  * Quick-fill support
+
+* LLM Integration
+  * Multiple provider support
+  * Prompt enhancement
+  * Quality analysis
+
+* Chrome Extension Features
+  * Context menu integration
+  * Quick prompt insertion
+  * Site-specific settings
+
+-----
+
 Section: Technical Spec
 Description: Comprehensive technical specification documenting the project's architecture, core features, data models, API structure, security features, and implementation considerations for both the Chrome extension frontend and Express.js backend.
 ---
