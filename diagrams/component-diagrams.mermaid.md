@@ -1,3 +1,15 @@
+%%
+---
+name: component-diagrams
+type: repo
+agent: CodeActAgent
+---
+Repository: PromptHub
+Description: Mermaid diagram illustrating the hierarchical structure and relationships between Chrome extension components, including the popup interface, main UI components, context providers, and service layers.
+---
+
+%%
+
 flowchart TD
     subgraph ChromeExt[Chrome Extension Components]
         Popup[Popup Interface] --> |Opens| MainUI[Main Interface]

@@ -1,3 +1,15 @@
+%%
+---
+name: project-architecture-diagram
+type: repo
+agent: CodeActAgent
+---
+Repository: PromptHub
+Description: High-level Mermaid diagram illustrating the project's architectural components and their interactions, including the Chrome extension frontend, state management, extension layer, and backend services, with clear visualization of data flow and system integration points.
+---
+%%
+
+
 graph TB
     subgraph Frontend[Frontend - Chrome Extension]
         React[React Components]
