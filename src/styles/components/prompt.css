@@ -1,1 +1,112 @@
-/* TODO: Add styles */
+/* Prompt Card Styles */
+.prompt-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1rem;
+  margin: 1rem 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.prompt-card:hover {
+  background-color: var(--card-hover);
+  color: var(--card-foreground-hover);
+}
+
+/* Prompt List Styles */
+.prompt-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prompt-list-item {
+  margin-bottom: 1rem;
+}
+
+/* Version History Display */
+.version-history {
+  background-color: var(--background);
+  color: var(--foreground);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+}
+
+.version-history-item {
+  margin-bottom: 0.5rem;
+}
+
+/* Enhancement Interface */
+.prompt-enhancement {
+  background-color: var(--enhancement-background);
+  color: var(--enhancement-foreground);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+}
+
+/* Tag Display and Management */
+.prompt-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.prompt-tag {
+  background-color: var(--tag-background);
+  color: var(--tag-foreground);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+}
+
+/* Custom animations for prompt transitions */
+.prompt-transition {
+  animation: var(--slide-up-fade);
+}
+
+/* Responsive Design Patterns */
+@media (max-width: 768px) {
+  .prompt-card {
+    padding: 0.75rem;
+  }
+
+  .version-history,
+  .prompt-enhancement {
+    padding: 0.75rem;
+  }
+}
+
+/* Dark/Light Theme Support */
+:root {
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --card-hover: #f0f0f0;
+  --card-foreground-hover: #333333;
+  --background: #f9f9f9;
+  --foreground: #333333;
+  --enhancement-background: #e0e0e0;
+  --enhancement-foreground: #000000;
+  --tag-background: #d0d0d0;
+  --tag-foreground: #000000;
+  --border-radius: 4px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --slide-up-fade: slide-up-fade 0.5s ease-in-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --card: #333333;
+    --card-foreground: #ffffff;
+    --card-hover: #444444;
+    --card-foreground-hover: #ffffff;
+    --background: #222222;
+    --foreground: #ffffff;
+    --enhancement-background: #444444;
+    --enhancement-foreground: #ffffff;
+    --tag-background: #555555;
+    --tag-foreground: #ffffff;
+  }
+}

@@ -1,1 +1,88 @@
-/* TODO: Add styles */
+/* Dark Theme Styles */
+:root {
+  --card: #333333;
+  --card-foreground: #ffffff;
+  --card-hover: #444444;
+  --card-foreground-hover: #ffffff;
+  --background: #222222;
+  --foreground: #ffffff;
+  --enhancement-background: #444444;
+  --enhancement-foreground: #ffffff;
+  --tag-background: #555555;
+  --tag-foreground: #ffffff;
+  --border-radius: 4px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --slide-up-fade: slide-up-fade 0.5s ease-in-out;
+  --button-background: #0056b3;
+  --button-foreground: #ffffff;
+  --button-hover-background: #003f7f;
+  --button-hover-foreground: #ffffff;
+}
+
+/* Dark Theme Specific Styles for Prompt Components */
+.prompt-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+
+.prompt-card:hover {
+  background-color: var(--card-hover);
+  color: var(--card-foreground-hover);
+}
+
+.version-history {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.prompt-enhancement {
+  background-color: var(--enhancement-background);
+  color: var(--enhancement-foreground);
+}
+
+.prompt-tag {
+  background-color: var(--tag-background);
+  color: var(--tag-foreground);
+}
+
+/* Dark Theme Specific Styles for Editor Components */
+.editor-container {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.editor-container:hover {
+  background-color: var(--card-hover);
+  color: var(--card-foreground-hover);
+}
+
+.editor-button {
+  background-color: var(--button-background);
+  color: var(--button-foreground);
+}
+
+.editor-button:hover {
+  background-color: var(--button-hover-background);
+  color: var(--button-hover-foreground);
+}
+
+/* Dark Theme Specific Styles for Template Components */
+.template-container {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.template-container:hover {
+  background-color: var(--card-hover);
+  color: var(--card-foreground-hover);
+}
+
+.template-button {
+  background-color: var(--button-background);
+  color: var(--button-foreground);
+}
+
+.template-button:hover {
+  background-color: var(--button-hover-background);
+  color: var(--button-hover-foreground);
+}
