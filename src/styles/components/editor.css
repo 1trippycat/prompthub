@@ -9,46 +9,86 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.editor-container:hover {
-  background-color: var(--card-hover);
-  color: var(--card-foreground-hover);
+.editor-container:focus-within {
+  outline: 2px solid var(--focus-outline);
 }
 
-/* Editor Header Styles */
-.editor-header {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+/* Editor Toolbar Styles */
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
 }
 
-/* Editor Content Styles */
-.editor-content {
+.editor-toolbar button {
+  background-color: var(--button-background);
+  color: var(--button-foreground);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.editor-toolbar button:hover {
+  background-color: var(--button-hover-background);
+  color: var(--button-hover-foreground);
+}
+
+/* Text Editing Area Styles */
+.editor-textarea {
+  width: 100%;
+  height: 300px;
+  background-color: var(--textarea-background);
+  color: var(--textarea-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  font-family: var(--font-family);
   font-size: 1rem;
   line-height: 1.5;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* Editor Footer Styles */
-.editor-footer {
+.editor-textarea:focus {
+  outline: none;
+  border-color: var(--focus-border);
+}
+
+/* Version Controls Styles */
+.version-controls {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
 }
 
-/* Editor Button Styles */
-.editor-button {
+.version-controls button {
   background-color: var(--button-background);
   color: var(--button-foreground);
-  padding: 0.5rem 1rem;
   border: none;
   border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.editor-button:hover {
+.version-controls button:hover {
   background-color: var(--button-hover-background);
   color: var(--button-hover-foreground);
+}
+
+/* Enhancement Previews Styles */
+.enhancement-previews {
+  background-color: var(--enhancement-background);
+  color: var(--enhancement-foreground);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Responsive Design Patterns */
@@ -57,39 +97,66 @@
     padding: 0.75rem;
   }
 
-  .editor-header {
-    font-size: 1rem;
-  }
-
-  .editor-content {
-    font-size: 0.875rem;
-  }
-
-  .editor-footer {
+  .editor-toolbar {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .editor-button {
+  .editor-toolbar button {
+    margin-bottom: 0.5rem;
     width: 100%;
-    text-align: center;
+  }
+
+  .editor-textarea {
+    height: 200px;
+  }
+
+  .version-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .version-controls button {
+    width: 100%;
     margin-top: 0.5rem;
   }
 }
 
 /* Dark/Light Theme Support */
 :root {
+  --background: #f9f9f9;
+  --foreground: #333333;
+  --border: #cccccc;
+  --focus-outline: #007bff;
   --button-background: #007bff;
   --button-foreground: #ffffff;
   --button-hover-background: #0056b3;
   --button-hover-foreground: #ffffff;
+  --textarea-background: #ffffff;
+  --textarea-foreground: #000000;
+  --focus-border: #007bff;
+  --enhancement-background: #e0e0e0;
+  --enhancement-foreground: #000000;
+  --border-radius: 4px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --font-family: 'Arial', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --background: #222222;
+    --foreground: #ffffff;
+    --border: #444444;
+    --focus-outline: #0056b3;
     --button-background: #0056b3;
     --button-foreground: #ffffff;
     --button-hover-background: #003f7f;
     --button-hover-foreground: #ffffff;
+    --textarea-background: #333333;
+    --textarea-foreground: #ffffff;
+    --focus-border: #0056b3;
+    --enhancement-background: #444444;
+    --enhancement-foreground: #ffffff;
   }
 }
+  
