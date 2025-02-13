@@ -60,6 +60,7 @@ export const llmApi = {
     }
   },
 
+
   /**
    * Generate tags for the given content.
    * @param {string} content - The content to generate tags for.
